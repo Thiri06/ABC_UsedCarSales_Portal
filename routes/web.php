@@ -5,8 +5,20 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('welcome');  // Home page route
+})->name('home');  // Named route for easy navigation
+
+Route::get('/sell-my-car', function () {
+    return view('sellcar');  // Sell Car page route
+})->name('sell.my.car');  // Named route
+
+Route::get('/buy-car', function () {
+    return view('buycarlist');  // Buy Car page route
+})->name('buy.car');  // Named route
+
+Route::get('/contact-us', function () {
+    return view('contactus');  // Contact Us page route
+})->name('contact.us');  // Named route
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

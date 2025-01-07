@@ -221,7 +221,7 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('sell.my.car') }}">Sell My Car</a></li>
-                    <li class="nav-item mt-1"><a class="nav-link" href="{{ route('buy.car') }}">Buy Car</a></li>
+                    <li class="nav-item mt-1"><a class="nav-link" href="{{ route('car.listing') }}">Buy Car</a></li>
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('contact.us') }}">Contact Us</a></li>
                     @if (Route::has('login'))
                         @auth
@@ -248,7 +248,7 @@
                 <a href="{{ route('sell.my.car') }}">
                     <button class="btn btn-dark me-2">Sell My Car</button>
                 </a>
-                <a href="{{ route('buy.car') }}">
+                <a href="{{ route('car.listing') }}">
                     <button class="btn btn-outline-dark ms-2">Buy Car</button>
                 </a>
             </div>

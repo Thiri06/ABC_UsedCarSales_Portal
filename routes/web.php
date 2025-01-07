@@ -12,9 +12,9 @@ Route::get('/sell-my-car', function () {
     return view('sellcar');  // Sell Car page route
 })->name('sell.my.car');  // Named route
 
-Route::get('/buy-car', function () {
-    return view('buycarlist');  // Buy Car page route
-})->name('buy.car');  // Named route
+Route::get('/car-listing', function () {
+    return view('carlisting');  // Buy Car page route
+})->name('car.listing');  // Named route
 
 Route::get('/contact-us', function () {
     return view('contactus');  // Contact Us page route

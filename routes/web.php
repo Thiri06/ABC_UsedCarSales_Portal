@@ -12,17 +12,12 @@ Route::get('/sell-my-car', function () {
     return view('sellcar');  // Sell Car page route
 })->name('sell.my.car');  // Named route
 
-<<<<<<< HEAD
+
 Route::get('/car-listing', [CarListingController::class, 'index'])->name('car.listing');
 
 // Car Detail Route
 Route::get('/car-detail/{id}', [CarListingController::class, 'show'])->name('car.detail');
-=======
-// car listing page
-Route::get('/car-listing', function () {
-    return view('carlisting');  // Buy Car page route
-})->name('car.listing');  // Named route
->>>>>>> 2dcf11d6a40bb4a8d2491c78982a541d3e8247eb
+
 
 // contact us page
 Route::get('/contact-us', function () {

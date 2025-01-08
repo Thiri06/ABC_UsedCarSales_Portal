@@ -213,7 +213,9 @@
     <!-- Navigation Bar Start -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">EliteRides</a>
+            <a class="navbar-brand" href="{{ route('home') }}">
+                <i class="fas fa-car-side"></i>
+                EliteRides</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -263,50 +265,19 @@
     <div class="container top-deals section-spacing">
         <h2 class="text-center mb-5" style="color: #dddefd">Top Deals on EliteRides:</h2>
         <div class="row g-4">
+            @foreach ($topCars as $car)
             <div class="col-md-3 mt-5 mb-5">
                 <div class="card">
-                    <img src="{{ asset('images/card1.jpg') }}" class="card-img-top" alt="Car Image">
+                    <img src="{{ asset($car->img_path) }}" class="card-img-top" alt="Car Image">
                     <div class="card-body">
-                        <h5 class="card-title">2018 Toyota Corolla</h5>
-                        <p class="card-text highlight-owner">Kyaw Thu</p>
-                        <p class="highlight-price">1150 Lakh</p>
-                        <a href="#" class="btn btn-primary">View Details</a>
+                        <h5 class="card-title">{{ $car->make }} {{ $car->model }}</h5>
+                        <p class="card-text highlight-owner">{{ $car->user->name }}</p> <!-- Display user name -->
+                        <p class="highlight-price">${{ number_format($car->price, 2) }}</p> <!-- Display car price -->
+                        <a href="{{ route('car.detail', $car->id) }}" class="btn btn-primary">View Details</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mt-5 mb-5">
-                <div class="card">
-                    <img src="{{ asset('images/card1.jpg') }}" class="card-img-top" alt="Car Image">
-                    <div class="card-body">
-                        <h5 class="card-title">2019 Honda Civic</h5>
-                        <p class="card-text highlight-owner">Aung Myint</p>
-                        <p class="highlight-price">1250 Lakh</p>
-                        <a href="#" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mt-5 mb-5">
-                <div class="card">
-                    <img src="{{ asset('images/card1.jpg') }}" class="card-img-top" alt="Car Image">
-                    <div class="card-body">
-                        <h5 class="card-title">2018 Toyota Corolla</h5>
-                        <p class="card-text highlight-owner">Kyaw Thu</p>
-                        <p class="highlight-price">1150 Lakh</p>
-                        <a href="#" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mt-5 mb-5">
-                <div class="card">
-                    <img src="{{ asset('images/card1.jpg') }}" class="card-img-top" alt="Car Image">
-                    <div class="card-body">
-                        <h5 class="card-title">2019 Honda Civic</h5>
-                        <p class="card-text highlight-owner">Aung Myint</p>
-                        <p class="highlight-price">1250 Lakh</p>
-                        <a href="#" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
     <!-- Top Deals Section End -->

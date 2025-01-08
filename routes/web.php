@@ -3,18 +3,18 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CarListingController;
 
-Route::get('/', function () {
-    return view('welcome');  // Home page route
-})->name('home');  // Named route for easy navigation
+Route::get('/', [CarListingController::class, 'showHomepage'])->name('home');
 
 Route::get('/sell-my-car', function () {
     return view('sellcar');  // Sell Car page route
 })->name('sell.my.car');  // Named route
 
-Route::get('/car-listing', function () {
-    return view('carlisting');  // Buy Car page route
-})->name('car.listing');  // Named route
+Route::get('/car-listing', [CarListingController::class, 'index'])->name('car.listing');
+
+// Car Detail Route
+Route::get('/car-detail/{id}', [CarListingController::class, 'show'])->name('car.detail');
 
 Route::get('/contact-us', function () {
     return view('contactus');  // Contact Us page route

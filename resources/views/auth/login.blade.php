@@ -74,11 +74,9 @@
         .form-container {
             display: flex;
             justify-content: center;
-            flex-grow: 1;
         }
 
         footer {
-            footer {
             background-color: #010113;
             color: #dfe0fd;
             padding: 10px 10px;
@@ -89,7 +87,6 @@
             width: 100%;
             margin-top: 20px;
             border-top: 1px solid #a5a7e2;
-        }
         }
 
         .btn-primary {
@@ -134,7 +131,9 @@
     <!-- Navigation Bar Start -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">EliteRides</a>
+            <a class="navbar-brand" href="{{ route('home') }}">
+                <i class="fas fa-car-side"></i>
+                EliteRides</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

@@ -13,10 +13,14 @@ class CarPostSeeder extends Seeder
      */
     public function run(): void
     {
+<<<<<<< HEAD
         DB::table('car_posts')->truncate();
 
         DB::table('car_posts')->insert([
             // Toyota Posts
+=======
+        DB::table('car_posts')->insert([
+>>>>>>> 2dcf11d6a40bb4a8d2491c78982a541d3e8247eb
             [
                 'condition' => 'New',
                 'make' => 'Toyota',
@@ -27,7 +31,11 @@ class CarPostSeeder extends Seeder
                 'steering_position' => 'Left',
                 'transmission' => 'Automatic',
                 'fuel_type' => 'Petrol',
+<<<<<<< HEAD
                 'color' => 'White',
+=======
+                'color' => 'Blue',
+>>>>>>> 2dcf11d6a40bb4a8d2491c78982a541d3e8247eb
                 'description' => 'Brand-new Toyota Corolla with excellent fuel efficiency.',
                 'img_path' => 'car-images/toyota-corolla.jpg',
                 'status' => 'available',
@@ -37,6 +45,7 @@ class CarPostSeeder extends Seeder
             ],
             [
                 'condition' => 'Used',
+<<<<<<< HEAD
                 'make' => 'Toyota',
                 'model' => 'Camry',
                 'registration_year' => 2021,
@@ -75,6 +84,8 @@ class CarPostSeeder extends Seeder
             // Honda Posts
             [
                 'condition' => 'Used',
+=======
+>>>>>>> 2dcf11d6a40bb4a8d2491c78982a541d3e8247eb
                 'make' => 'Honda',
                 'model' => 'Civic',
                 'registration_year' => 2020,
@@ -92,6 +103,7 @@ class CarPostSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+<<<<<<< HEAD
                 'condition' => 'New',
                 'make' => 'Honda',
                 'model' => 'Accord',
@@ -197,12 +209,26 @@ class CarPostSeeder extends Seeder
                 'fuel_type' => 'Petrol',
                 'color' => 'Silver',
                 'description' => 'Ford Mustang with advanced safety features.',
+=======
+                'condition' => 'Used',
+                'make' => 'Ford',
+                'model' => 'Mustang',
+                'registration_year' => 2019,
+                'price' => 30000.00,
+                'engine_power' => '450 HP',
+                'steering_position' => 'Left',
+                'transmission' => 'Manual',
+                'fuel_type' => 'Petrol',
+                'color' => 'Silver',
+                'description' => 'Classic Ford Mustang with high performance and great handling.',
+>>>>>>> 2dcf11d6a40bb4a8d2491c78982a541d3e8247eb
                 'img_path' => 'car-images/ford-mustang.jpg',
                 'status' => 'available',
                 'user_id' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+<<<<<<< HEAD
             [
                 'condition' => 'New',
                 'make' => 'Ford',
@@ -257,6 +283,10 @@ class CarPostSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+=======
+
+            // Add more sample data as needed
+>>>>>>> 2dcf11d6a40bb4a8d2491c78982a541d3e8247eb
         ]);
     }
 }

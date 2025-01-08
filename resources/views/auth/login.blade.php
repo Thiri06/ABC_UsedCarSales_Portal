@@ -141,7 +141,11 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('sell.my.car') }}">Sell My Car</a></li>
+<<<<<<< HEAD
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('car.listing') }}">Buy Car</a></li>
+=======
+                    <li class="nav-item mt-1"><a class="nav-link" href="{{ route('car.listing) }}">Buy Car</a></li>
+>>>>>>> 2dcf11d6a40bb4a8d2491c78982a541d3e8247eb
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('contact.us') }}">Contact Us</a></li>
                     @if (Route::has('login'))
                         @auth

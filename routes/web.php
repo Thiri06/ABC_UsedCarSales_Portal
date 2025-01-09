@@ -4,15 +4,21 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CarListingController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', [CarListingController::class, 'showHomepage'])->name('home');
+
+// contact us page
+Route::get('/about-us', function () {
+    return view('aboutus');
+})->name('about.us');
 
 // sell car form page
 Route::get('/sell-my-car', function () {
     return view('sellcar');  // Sell Car page route
 })->name('sell.my.car');  // Named route
 
-
+// Car Listing Route
 Route::get('/car-listing', [CarListingController::class, 'index'])->name('car.listing');
 
 // Car Detail Route
@@ -24,9 +30,7 @@ Route::get('/contact-us', function () {
     return view('contactus');  // Contact Us page route
 })->name('contact.us');  // Named route
 
-
-
-
+Route::post('/contact-submit', [ContactController::class, 'submit'])->name('contact.submit');
 
 
 

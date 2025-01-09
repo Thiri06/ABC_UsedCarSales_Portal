@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | EliteRides</title>
+    <title>About Us | EliteRides</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -39,7 +39,6 @@
 
         .navbar-nav .nav-link {
             color: #dfe0fd !important;
-            font-size: 1.1rem;
             margin-right: 20px;
         }
 
@@ -71,9 +70,8 @@
             color: #fff !important;
         }
 
-        .form-container {
-            display: flex;
-            justify-content: center;
+        .fs-5 {
+            color: #a5a7e2;
         }
 
         footer {
@@ -89,41 +87,81 @@
             border-top: 1px solid #a5a7e2;
         }
 
-        .btn-primary {
-            background-color: #f36d33;
-            border: none;
+        /* Section Heading Style */
+        h1.display-4, h2 {
+            background: linear-gradient(45deg, #f36d33, #dbf320);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
         }
 
-        .btn-primary:hover {
+        /* Card-like Design for Content */
+        .about-section {
+            background-color: #1c1f2a;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .about-section:hover {
+            transform: translateY(-10px);
+        }
+
+        .about-section h2 {
+            color: #f36d33;
+        }
+
+        .about-section p {
+            color: #a5a7e2;
+            line-height: 1.8;
+        }
+
+        .about-item {
+            background-color: #2a2e42;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .about-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .about-item strong {
+            color: #f36d33;
+        }
+
+        .cta-button {
+            background-color: #f36d33;
+            color: #010113;
+            border-radius: 5px;
+            padding: 15px 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .cta-button:hover {
             background-color: #dbf320;
             color: #010113;
         }
 
-        .form-label {
-            color: #dfe0fd;
+        /* Responsive Button */
+        @media (max-width: 576px) {
+            .cta-button {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
         }
 
-        .form-control {
-            background-color: #23244d;
-            color: #dfe0fd;
-            border: 1px solid #787cf8;
-        }
-
-        .form-control:focus {
-            background-color: #2d2f65;
-            border-color: #f36d33;
-            box-shadow: 0 0 5px rgba(243, 109, 51, 0.5);
-        }
-
-        .form-card {
-            border-radius: 8px;
-            box-shadow: 0 8px 12px rgb(25, 26, 65);
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .form-card h2 {
-            color: #dfe0fd;
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -132,8 +170,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
-                <i class="fas fa-car-side"></i>
-                EliteRides</a>
+                <i class="fas fa-car-side"></i> EliteRides
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -158,70 +196,58 @@
             </div>
         </div>
     </nav>
-    <br>
     <!-- Navigation Bar End -->
 
-    <!-- Login Form --> 
-    <div class="container">
-        <div class="row mt-5 mb-5 justify-content-center">
-            <div class="col-sm-10 col-md-6 col-lg-4">
-                <div class="form-card">
-                    <h2 class="mb-4 text-center">Login</h2>
+    {{-- About Us Content Area Start --}}
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 class="display-4 mb-3">About Us</h1>
+                <p class="fs-5">
+                    Discover the story behind EliteRides and why we are the trusted platform for buying and selling cars.
+                </p>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-8 mx-auto">
+                <div class="about-section">
+                    <h2>Who We Are</h2>
+                    <p>At EliteRides, we are passionate about simplifying the car buying and selling experience for everyone. Our platform bridges the gap between car buyers and sellers with a focus on trust, efficiency, and transparency. Whether you're upgrading to a brand-new car or selling your trusted ride, EliteRides ensures a seamless experience tailored to your needs.</p>
+                    <p>Founded with the belief that every car tells a story, we strive to make every transaction not just a deal but a journey. Our team is committed to connecting people and vehicles, empowering dreams of mobility while maintaining trust at every step.</p>
+                </div>
 
-                    <!-- Session Status -->
-                    <x-auth-session-status class="mb-4" :status="session('status')" />
+                <div class="about-section">
+                    <h2>Why Choose Us</h2>
+                    <div class="about-item">
+                        <strong>Ease of Use:</strong> Our intuitive platform ensures that even first-time users can navigate with confidence.
+                    </div>
+                    <div class="about-item">
+                        <strong>Verified Listings:</strong> Transparency is our priority. Every car listing undergoes strict verification.
+                    </div>
+                    <div class="about-item">
+                        <strong>Advanced Search Filters:</strong> Easily find your dream car using customizable filters for make, model, price, and more.
+                    </div>
+                    <div class="about-item">
+                        <strong>Secure Transactions:</strong> Our secure payment system ensures safe and hassle-free transactions.
+                    </div>
+                    <div class="about-item">
+                        <strong>Dedicated Support:</strong> Our support team is always ready to assist, ensuring a smooth experience for buyers and sellers alike.
+                    </div>
+                </div>
 
-                    <!-- Error Message -->
-                    @session('error')
-                        <p class="error-message text-danger">{{$value}}</p>
-                    @endsession
-
-                    <!-- Login Form Starts Here -->
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-
-                        <!-- Email Address -->
-                        <div class="mb-3">
-                            <x-input-label for="email" :value="__('Email')" />
-                            <x-text-input id="email" class="form-control" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                        </div>
-
-                        <!-- Password -->
-                        <div class="mt-4 mb-3">
-                            <x-input-label for="password" :value="__('Password')" />
-                            <x-text-input id="password" class="form-control" type="password" name="password" required autocomplete="current-password" />
-                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                        </div>
-
-                        <!-- Remember Me -->
-                        <div class="mb-3">
-                            <label for="remember_me" class="inline-flex items-center">
-                                <input id="remember_me" type="checkbox" class="form-check-input" name="remember">
-                                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                            </label>
-                        </div>
-
-                        <div class="d-flex justify-content-between align-items-center">
-                            @if (Route::has('password.request'))
-                                <a class="text-sm text-gray-600" href="{{ route('password.request') }}">
-                                    {{ __('Forgot your password?') }}
-                                </a>
-                            @endif
-
-                            <x-primary-button class="btn btn-primary">
-                                {{ __('Log in') }}
-                            </x-primary-button>
-                        </div>
-                    </form>
+                <div class="text-center">
+                    <a href="{{ route('contact.us') }}" class="cta-button mt-3">
+                        Contact Us for More Information
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+    {{-- About Us Content Area End --}}
 
     <!-- Footer -->
     <footer class="text-center mt-5">
-        <p class="mb-0">&copy; 2025 EliteRides. All rights reserved.</p>
+        <p>&copy; 2025 EliteRides. All rights reserved.</p>
     </footer>
 
     <!-- Bootstrap JS -->

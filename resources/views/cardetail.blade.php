@@ -39,7 +39,7 @@
 
         .navbar-nav .nav-link {
             color: #dfe0fd !important;
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin-right: 20px;
         }
 
@@ -152,6 +152,13 @@
             color: #dfe0fd;
             font-size: 14px;
         }
+        .text-danger {
+            color: #f36d33;
+            font-size: 0.85rem;
+        }
+        .d-none {
+            display: none;
+        }
 
     </style>
 </head>
@@ -169,7 +176,6 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('about.us') }}">About Us</a></li>
-                    <li class="nav-item mt-1"><a class="nav-link" href="{{ route('sell.my.car') }}">Sell My Car</a></li>
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('car.listing') }}">Buy Car</a></li>
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('contact.us') }}">Contact Us</a></li>
                     @if (Route::has('login'))
@@ -204,7 +210,7 @@
                     <h2 class="text-start my-2 mb-4"># {{ $car->make }} {{ $car->model }}</h2>
                     
                     <!-- Full-Width Image -->
-                    <img src="{{ asset($car->img_path) }}" 
+                    <img src="{{ asset('storage/' . $car->img_path) }}" 
                         alt="{{ $car->make }} {{ $car->model }}" 
                         class="img-fluid w-100 rounded">
 
@@ -220,15 +226,24 @@
                 <br>
                 <div class="form-card bid-form mt-5">
                     <h4 class="mb-3">Place Your Bid</h4>
-                    <p>Current Highest Bid: <strong>${{ $car->highest_bid }}</strong></p>
+                    <p>Current Highest Bid: <strong id="currentBid">${{ $car->highest_bid }}</strong></p>
                     <form action="#" method="POST">
                     {{-- <form action="{{ route('place.bid', $car->id) }}" method="POST"> --}}
                         @csrf
                         <div class="mb-3">
                             <label for="bidAmount" class="form-label">Your Bid</label>
-                            <input type="number" class="form-control" id="bidAmount" name="bid_amount" placeholder="Enter your bid" required>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                id="bidAmount" 
+                                name="bid_amount" 
+                                placeholder="Enter a bid higher than ${{ $car->highest_bid }}" 
+                                required
+                                min="{{ $car->highest_bid + 1 }}"
+                            >
+                            <small id="bidFeedback" class="text-danger d-none">Your bid must be higher than ${{ $car->highest_bid }}</small>
                         </div>
-                        <button type="submit" class="btn btn-primary">Place Bid</button>
+                        <button type="submit" class="btn btn-primary" id="placeBidBtn">Place Bid</button>
                     </form>
                 </div>
             </div>
@@ -289,17 +304,30 @@
             <div class="col-12 col-md-3 mb-5">
                 <div class="form-card appointment-form">
                     <h4 class="mb-3">Schedule an Appointment</h4>
-                    <form action="#" method="POST">
+                    <form action="#" method="POST" id="appointmentForm">
                         @csrf
                         <div class="mb-3">
                             <label for="appointmentDate" class="form-label" aria-label="Select appointment date">Date</label>
-                            <input type="date" class="form-control" id="appointmentDate" name="appointment_date" required>
+                             <input 
+                                type="date" 
+                                class="form-control" 
+                                id="appointmentDate" 
+                                name="appointment_date" 
+                                min="{{ date('Y-m-d') }}" 
+                                required>
+                            <small id="dateFeedback" class="text-danger d-none">Selected date is unavailable.</small>
                         </div>
                         <div class="mb-3">
                             <label for="appointmentTime" class="form-label" aria-label="Select appointment time">Time</label>
-                            <input type="time" class="form-control" id="appointmentTime" name="appointment_time" required>
+                            <input 
+                                type="time" 
+                                class="form-control" 
+                                id="appointmentTime" 
+                                name="appointment_time" 
+                                required>
+                            <small id="timeFeedback" class="text-danger d-none">Selected time is unavailable.</small>
                         </div>
-                        <button type="submit" class="btn btn-primary">Request Appointment</button>
+                        <button type="submit" class="btn btn-primary" id="requestAppointmentBtn">Request Appointment</button>
                     </form>
                 </div>
             </div>
@@ -314,7 +342,49 @@
     </footer>
 
     <script>
-        document.getElementById('appointmentDate').min = new Date().toISOString().split("T")[0];
+        document.getElementById('bidAmount').addEventListener('input', function () {
+            const currentBid = parseFloat(document.getElementById('currentBid').innerText.replace('$', ''));
+            const bidAmount = parseFloat(this.value);
+            const feedback = document.getElementById('bidFeedback');
+            
+            if (bidAmount <= currentBid) {
+                feedback.classList.remove('d-none');
+                document.getElementById('placeBidBtn').disabled = true;
+            } else {
+                feedback.classList.add('d-none');
+                document.getElementById('placeBidBtn').disabled = false;
+            }
+        });
+
+        const unavailableDates = ['2025-01-15', '2025-01-18']; // Example unavailable dates
+        const unavailableTimes = ['13:00', '14:00']; // Example unavailable times
+
+        document.getElementById('appointmentDate').addEventListener('input', function () {
+            const selectedDate = this.value;
+            const feedback = document.getElementById('dateFeedback');
+            
+            if (unavailableDates.includes(selectedDate)) {
+                feedback.classList.remove('d-none');
+                document.getElementById('requestAppointmentBtn').disabled = true;
+            } else {
+                feedback.classList.add('d-none');
+                document.getElementById('requestAppointmentBtn').disabled = false;
+            }
+        });
+
+        document.getElementById('appointmentTime').addEventListener('input', function () {
+            const selectedTime = this.value;
+            const feedback = document.getElementById('timeFeedback');
+            
+            if (unavailableTimes.includes(selectedTime)) {
+                feedback.classList.remove('d-none');
+                document.getElementById('requestAppointmentBtn').disabled = true;
+            } else {
+                feedback.classList.add('d-none');
+                document.getElementById('requestAppointmentBtn').disabled = false;
+            }
+        });
+
     </script>
 
     <!-- Bootstrap JS -->

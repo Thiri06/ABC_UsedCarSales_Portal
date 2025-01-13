@@ -39,7 +39,7 @@
 
         .navbar-nav .nav-link {
             color: #dfe0fd !important;
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin-right: 20px;
         }
 
@@ -131,6 +131,10 @@
             padding: 30px;
             text-align: center;
         }
+        .contact-title {
+            color:#f36d33;
+            font-weight: bold;
+        }
 
     </style>
 </head>
@@ -148,7 +152,6 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('about.us') }}">About Us</a></li>
-                    <li class="nav-item mt-1"><a class="nav-link" href="{{ route('sell.my.car') }}">Sell My Car</a></li>
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('car.listing') }}">Buy Car</a></li>
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('contact.us') }}">Contact Us</a></li>
                     @if (Route::has('login'))
@@ -200,7 +203,8 @@
 
                 <!-- Right Column for Form -->
                 <div class="p-0 col-sm-10 col-md-4 col-lg-5">
-                    <div class="form-card mt-5">
+                    <h4 class="text-center contact-title">Reach Out To Us!</h4>
+                    <div class="form-card mt-3">
                         <form action="{{ route('contact.submit') }}" method="POST">
                             @csrf
                             <!-- Name Field -->

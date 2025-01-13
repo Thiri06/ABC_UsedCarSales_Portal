@@ -39,7 +39,7 @@
 
         .navbar-nav .nav-link {
             color: #dfe0fd !important;
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin-right: 20px;
         }
 

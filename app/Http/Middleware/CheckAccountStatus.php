@@ -30,16 +30,6 @@ class CheckAccountStatus
                 return redirect(route('login'))->with('error', 'Your account has been blocked, please contact ADMIN');
             }
         }
-        // if(auth()->check()){
-        //     if(auth()->user()->banned_at !== NULL){
-        //         auth()->logout();
-        //         $request->session()->invalidate();
-        //         $request->session()->regenerate();
-        //         return redirect(route('login'))->with('error', 'Your account has been blocked, please contact admin');
-        //     }
-        // }
-
-
         return $next($request);
     }
 }

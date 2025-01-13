@@ -223,7 +223,6 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('about.us') }}">About Us</a></li>
-                    <li class="nav-item mt-1"><a class="nav-link" href="{{ route('sell.my.car') }}">Sell My Car</a></li>
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('car.listing') }}">Buy Car</a></li>
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('contact.us') }}">Contact Us</a></li>
                     @if (Route::has('login'))
@@ -269,7 +268,7 @@
             @foreach ($topCars as $car)
             <div class="col-md-3 mt-5 mb-5">
                 <div class="card">
-                    <img src="{{ asset($car->img_path) }}" class="card-img-top" alt="Car Image">
+                    <img src="{{ asset('storage/' . $car->img_path) }}" class="card-img-top" alt="Car Image">
                     <div class="card-body">
                         <h5 class="card-title">{{ $car->make }} {{ $car->model }}</h5>
                         <p class="card-text highlight-owner">{{ $car->user->name }}</p> <!-- Display user name -->

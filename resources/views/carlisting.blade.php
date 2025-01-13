@@ -39,7 +39,7 @@
 
         .navbar-nav .nav-link {
             color: #dfe0fd !important;
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin-right: 20px;
         }
 
@@ -180,7 +180,6 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('about.us') }}">About Us</a></li>
-                    <li class="nav-item mt-1"><a class="nav-link" href="{{ route('sell.my.car') }}">Sell My Car</a></li>
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('car.listing') }}">Buy Car</a></li>
                     <li class="nav-item mt-1"><a class="nav-link" href="{{ route('contact.us') }}">Contact Us</a></li>
                     @if (Route::has('login'))
@@ -319,7 +318,9 @@
                         <div class="card">
                             <div class="row g-0">
                                 <div class="col-md-4">
-                                    <img src="{{ asset($car->img_path) }}" class="img-fluid rounded-start" alt="{{ $car->make }} {{ $car->model }}">
+                                    <img src="{{ asset('storage/' . $car->img_path) }}" 
+                                    class="img-fluid w-100 rounded-start" 
+                                    alt="{{ $car->make }} {{ $car->model }}">
                                     {{-- in my table, I have user id. I want to display the user name right below this image and also the status --}}
                                     
                                     {{-- Fetch user details using the user_id (assuming you have the relationship set up in your Car model) --}}

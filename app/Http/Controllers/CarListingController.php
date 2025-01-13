@@ -17,6 +17,9 @@ class CarListingController extends Controller
         $models = CarPost::distinct()->pluck('model');
         $colors = CarPost::distinct()->pluck('color');
 
+        // Filter posts to only include those with "available" status
+        $query->where('status', 'available');
+
         // Apply filters only when they are provided and valid
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
@@ -66,6 +69,9 @@ class CarListingController extends Controller
         if ($request->filled('color')) {
             $query->where('color', $request->color);
         }
+
+        // **Order posts by ID in descending order**
+        $query->orderBy('updated_at', 'desc')->orderBy('id', 'desc');
 
         // Paginate the results
         $carPosts = $query->paginate(8);

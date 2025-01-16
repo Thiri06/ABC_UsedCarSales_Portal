@@ -28,14 +28,13 @@
         </a>
         {{-- This Your Car Listings is a page where users can view his published car posts
         and also edit, and deactivate the car posts which are sold out to remove from public car listing page.  --}}
-        <a href="#" class="{{ request()->routeIs('your.bids') ? 'active' : '' }}">
+        <a href="{{ route('user.yourBids') }}" class="{{ request()->routeIs('user.yourBids') ? 'active' : '' }}">
             <i class="fas fa-history" ></i><span>  Your Bids</span>
         </a>
         {{-- This Your Bids page is where users can view other's bids along with the bidder's name on his published car posts.
         Moreover, users can accept the other's bid or reject the bid. 
-        If user accept the bid, that car will be regarded as sold out and
-        user needs to deactivate that car post. --}}
-        <a href="#" class="{{ request()->routeIs('your.appointments') ? 'active' : '' }}">
+        If user accept the bid, that car will be regarded as sold out--}}
+        <a href="{{ route('user.yourAppointments') }}" class="{{ request()->routeIs('user.yourAppointments') ? 'active' : '' }}">
             <i class="fas fa-calendar-alt"></i><span>  Your Appointments</span>
         </a>
         {{-- This Your Appointments page is where users can view other's appointments along with date and time for test drive for user's car.

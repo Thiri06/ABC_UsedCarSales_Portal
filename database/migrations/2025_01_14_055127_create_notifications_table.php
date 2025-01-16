@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('car_posts', function (Blueprint $table) {
-            //
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->id();
+            $table->morphs('notifiable');
+            $table->string('type');
+            $table->text('data');
+            $table->timestamp('read_at')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -21,8 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('car_posts', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('notifications');
     }
 };

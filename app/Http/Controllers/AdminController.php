@@ -26,8 +26,12 @@ class AdminController extends Controller implements HasMiddleware
     }
     public function getUserData($id)
     {
-        $user = User::findOrFail($id);
-        return response()->json($user);
+        try {
+            $user = User::findOrFail($id);
+            return response()->json($user);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
     }
     // Update user data in the database
     public function updateUser(Request $request, $id)
@@ -47,13 +51,13 @@ class AdminController extends Controller implements HasMiddleware
     {
         $user = User::findOrFail($id);
         $user->update(['banned_at' => now()]); // Set current timestamp to ban the user
-        return redirect()->back()->with('success', 'User has been banned successfully.');
+        return redirect()->back()->with('success', 'User account has been deactivated successfully.');
     }
-    public function unbanUser($id)
+    public function unBanUser($id)
     {
         $user = User::findOrFail($id);
         $user->update(['banned_at' => null]); // Reset the banned_at column to unban the user
-        return redirect()->back()->with('success', 'User has been unbanned successfully.');
+        return redirect()->back()->with('success', 'User account has been activated back successfully.');
     }
 
 
@@ -79,7 +83,7 @@ class AdminController extends Controller implements HasMiddleware
     {
         $request->validate(
             [
-                'condition' => 'required|string|in:New,Used',
+                'condition' => 'required|string|in:Second Hand,Third Hand',
                 'make' => 'required|string|max:255',
                 'model' => 'required|string|max:255',
                 'registration_year' => 'required|integer|min:1900|max:' . date('Y'),

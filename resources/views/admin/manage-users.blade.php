@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | EliteRides</title>
+    <title>Dashboard | ABC Cars </title>
     <!-- Bootstrap CSS -->
+    <link rel="icon" href="{{ asset('images/car.png') }}" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Spline+Sans+Mono&display=swap" rel="stylesheet">
@@ -25,11 +26,28 @@
         }
 
         .navbar-brand {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: bold;
-            background: linear-gradient(45deg, #f36d33, #f9d423);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-text {
+            background: linear-gradient(45deg, #f36d33 30%, #dbf320 70%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .cars-text {
+            font-weight: 500;
+            font-size: 1.8rem;
+        }
+
+        .fa-car-side {
+            color: #f36d33;
+            margin-right: 5px;
         }
 
         .navbar {
@@ -231,10 +249,10 @@
                                     <td>
                                         @if($user->banned_at)
                                             <!-- Show Unban Button for Banned Users -->
-                                            <form action="{{ route('admin.unbanUser', $user->id) }}" method="POST" style="display:inline-block;">
+                                            <form action="{{ route('admin.unBanUser', $user->id) }}" method="POST" style="display:inline-block;">
                                                 @csrf
                                                 @method('PUT')
-                                                <button class="btn btn-success btn-sm" onclick="return confirm('Are you sure?')">Unban</button>
+                                                <button class="btn btn-success btn-sm" onclick="return confirm('Are you sure?')">Activate</button>
                                             </form>
                                         @else
                                             <!-- Show Edit and Ban Buttons for Active Users -->
@@ -242,7 +260,7 @@
                                             <form action="{{ route('admin.banUser', $user->id) }}" method="POST" style="display:inline-block;">
                                                 @csrf
                                                 @method('PUT')
-                                                <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Ban</button>
+                                                <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to deactivate this user account?')">Deactivate</button>
                                             </form>
                                         @endif
                                     </td>
@@ -305,7 +323,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2025 EliteRides. All rights reserved.</p>
+        <p>&copy; 2025 ABC Cars . All rights reserved.</p>
     </footer>
 
     <!-- Bootstrap JS -->

@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | EliteRides</title>
+    <title>Dashboard | ABC Cars </title>
     <!-- Bootstrap CSS -->
+    <link rel="icon" href="{{ asset('images/car.png') }}" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Spline+Sans+Mono&display=swap" rel="stylesheet">
@@ -25,11 +26,28 @@
         }
 
         .navbar-brand {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: bold;
-            background: linear-gradient(45deg, #f36d33, #f9d423);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-text {
+            background: linear-gradient(45deg, #f36d33 30%, #dbf320 70%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .cars-text {
+            font-weight: 500;
+            font-size: 1.8rem;
+        }
+
+        .fa-car-side {
+            color: #f36d33;
+            margin-right: 5px;
         }
 
         .navbar {
@@ -165,42 +183,18 @@
             background-color: #222552;
         }
 
-        /* Custom grid for cards */
-        /* .stat-cards-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-        } */
-
         .stat-card .stat-value {
             font-size: 12px;
             font-weight: bold;
         }
         .stat-card img {
             max-width: 100%;
-            height: auto;
+            height: 210px;
             border-radius: 10px;
         }
         .modal img {
-            width: 100%;
-            height: auto;
-        }
-
-
-        /* New chart container */
-        .chart-container {
-            margin-top: 40px;
-            display: flex;
-        }
-
-        .chart {
-            border-radius: 10px;
-            padding: 10px;
-        }
-
-        .chart h5 {
-            color:#f36d33;
-            margin-bottom: 20px;
-            font-weight: bold;
+            max-width: 100%;
+            max-height: 300px;
         }
         .modal-header {
             background-color: #161632; 
@@ -253,13 +247,13 @@
                     <div class="row">
                         @if($carPosts->isEmpty())
                             <div class="col-12">
-                                <p>No car listings found. <a href="{{ route('user.sellCar') }}">Click here to post a car</a>.</p>
+                                <p>No car listings found. <a href="{{ route('user.create') }}">Click here to post a car</a>.</p>
                             </div>
                         @else
                             @foreach($carPosts as $post)
                             <div class="col-md-4 mb-4">
                                 <div class="stat-card">
-                                    <img src="{{ asset('storage/' . $post->img_path) }}" alt="Car Image" class="img-fluid width-100 rounded mb-3" style="max-height: 200px; object-fit: cover;">
+                                    <img src="{{ asset('storage/' . $post->img_path) }}" alt="Car Image" class="img-fluid width-100 height-100 rounded mb-3" style="object-fit: cover;">
                                     <h5>{{ $post->make }} {{ $post->model }}</h5>
                                     <p><strong>Price:</strong> ${{ number_format($post->price, 2) }}</p>
                                     <p>
@@ -283,7 +277,7 @@
                                         data-fuel="{{ $post->fuel_type }}"
                                         data-color="{{ $post->color }}"
                                         data-description="{{ $post->description }}"
-                                        data-status="{{ $post->status ? 'available' : 'unavailable' }}"
+                                        data-status="{{ $post->status }}"
                                         data-image="{{ asset('storage/' . $post->img_path) }}">
                                         <i class="fas fa-eye"></i> View Details
                                     </button>
@@ -308,6 +302,228 @@
                                     @endif
                                 </div>
                             </div>
+                            {{-- View Detail Modal --}}
+                            <div class="modal fade" id="viewDetailsModal" tabindex="-1" aria-labelledby="viewDetailsLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="viewDetailsLabel">Car Details</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Loading Spinner -->
+                                            <div id="loadingSpinner" class="text-center my-3" style="display: none;">
+                                                <div class="spinner-border text-primary" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                            </div>
+                                            <div id="carDetailsContent">
+                                                <div class="text-center">
+                                                    <img id="carImage" src="" alt="Car Image" class="img-fluid rounded mb-3" style="max-height: 300px; object-fit: cover;">
+                                                </div>
+                                                <!-- First Row -->
+                                                <div class="row">
+                                                    <div class="col text-start">
+                                                        <p><strong style="color:#f36d33;">Condition:</strong> <span id="carCondition" class="detail-texts"></span></p>
+                                                    </div>
+                                                    <div class="col text-start">
+                                                        <p><strong style="color:#f36d33;">Registration:</strong> <span id="carYear" class="detail-texts"></span></p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Second Row -->
+                                                <div class="row">
+                                                    <div class="col  text-start">
+                                                        <p><strong style="color:#f36d33;">Make:</strong> <span id="carMake" class="detail-texts"></span></p>
+                                                    </div>
+                                                    <div class="col text-start">
+                                                        <p><strong style="color:#f36d33;">Model:</strong> <span id="carModel" class="detail-texts"></span></p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Third Row -->
+                                                <div class="row">
+                                                    <div class="col text-start">
+                                                        <p><strong style="color:#f36d33;">Price:</strong> $<span id="carPrice" class="detail-texts"></span></p>
+                                                    </div>
+                                                    <div class="col text-start">
+                                                        <p><strong style="color:#f36d33;">Engine Power:</strong> <span id="carEngine" class="detail-texts"></span></p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Fourth Row -->
+                                                <div class="row">
+                                                    <div class="col text-start">
+                                                        <p><strong style="color:#f36d33;">Steering Position:</strong> <span id="carSteering" class="detail-texts"></span></p>
+                                                    </div>
+                                                    <div class="col text-start">
+                                                        <p><strong style="color:#f36d33;">Transmission:</strong> <span id="carTransmission" class="detail-texts"></span></p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Fifth Row -->
+                                                <div class="row">
+                                                    <div class="col text-start">
+                                                        <p><strong style="color:#f36d33;">Fuel Type:</strong> <span id="carFuel" class="detail-texts"></span></p>
+                                                    </div>
+                                                    <div class="col text-start">
+                                                        <p><strong style="color:#f36d33;">Color:</strong> <span id="carColor" class="detail-texts"></span></p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Sixth Row -->
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col text-start">
+                                                        <p><strong style="color:#f36d33;">Description:</strong> <span id="carDescription"  class="detail-texts"></span></p>
+                                                    </div>
+                                                </div>
+                                                <!-- Seventh Row -->
+                                                <div class="row">
+                                                    <div class="col text-start">
+                                                        <p><strong style="color:#f36d33;">Status:</strong> <span id="carStatus" class="detail-texts"></span></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" 
+                                                id="editCarBtn"
+                                                class="btn btn-outline-primary mb-3" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#updateCarModal" 
+                                                onclick="openEditModal(
+                                                    {{ $post->id }},
+                                                    '{{ $post->condition }}',
+                                                    '{{ $post->make }}',
+                                                    '{{ $post->model }}',
+                                                    '{{ $post->registration_year }}',
+                                                    '{{ $post->price }}',
+                                                    '{{ $post->engine_power }}',
+                                                    '{{ $post->steering_position }}',
+                                                    '{{ $post->transmission }}',
+                                                    '{{ $post->fuel_type }}',
+                                                    '{{ $post->color }}',
+                                                    '{{ $post->description }}',
+                                                    '{{ $post->status }}',
+                                                    '{{ $post->img_path }}',
+                                                )">
+                                                Edit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- Modal for Updating Car Posts --}}
+                            <div class="modal fade" id="updateCarModal" tabindex="-1" aria-labelledby="updateCarModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="updateCarModalLabel">Update Car Post</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form id="updateCarForm" method="POST" action="{{ route('user.updateCarPost', ['id' => $post->id]) }}" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('PUT')
+                                            
+                                            <div class="modal-body">
+                                                <input type="hidden" name="id" id="carPostId">
+                                                <div class="row">
+                                                    <div class="col-md-12 mb-3">
+                                                        <img id="previewImage" src="#" alt="Image Preview" class="img-fluid mt-2 mb-4" style="max-width: 200px; max-height: 150px;"><br>
+                                                        <br>
+                                                        <label for="img_path" class="form-label">Image</label>
+                                                        <input type="file" name="img_path" id="img_path" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="condition" class="form-label">Condition</label>
+                                                        <select id="condition" name="condition" class="form-select">
+                                                            <option value="Second Hand">Second Hand</option>
+                                                            <option value="Third Hand">Third Hand</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="make" class="form-label">Make (Brand)</label>
+                                                        <input type="text" name="make" id="make" class="form-control" placeholder="e.g., Toyota">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="model" class="form-label">Model</label>
+                                                        <input type="text" name="model" id="model" class="form-control" placeholder="e.g., Corolla">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="registration_year" class="form-label">Registration Year</label>
+                                                        <input type="number" name="registration_year" id="registration_year" class="form-control" min="1900" max="{{ date('Y') }}">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="price" class="form-label">Price</label>
+                                                        <input type="text" name="price" id="price" class="form-control" step="0.01">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="engine_power" class="form-label">Engine Power</label>
+                                                        <input type="text" name="engine_power" id="engine_power" class="form-control" placeholder="e.g., 150 HP">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="steering_position" class="form-label">Steering Position</label>
+                                                        <select id="steering_position" name="steering_position" class="form-select" required>
+                                                            <option value="Left">Left</option>
+                                                            <option value="Right">Right</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="transmission" class="form-label">Transmission</label>
+                                                        <select id="transmission" name="transmission" class="form-select" required>
+                                                            <option value="Automatic">Automatic</option>
+                                                            <option value="Manual">Manual</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="fuel_type" class="form-label">Fuel Type</label>
+                                                        <select id="fuel_type" name="fuel_type" class="form-select" required>
+                                                            <option value="Petrol">Petrol</option>
+                                                            <option value="Diesel">Diesel</option>
+                                                            <option value="Electric">Electric</option>
+                                                            <option value="Hybrid">Hybrid</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="color" class="form-label">Color</label>
+                                                        <input type="text" name="color" id="color" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="description" class="form-label">Description</label>
+                                                        <textarea name="description" id="description" class="form-control" rows="3"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="status" class="form-label">Status</label>
+                                                        <select class="form-select" id="status" name="status">
+                                                            <option value="available">Available</option>
+                                                            <option value="unavailable">Unavailable</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn save-btn">Save Changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                             @endforeach
                         @endif
                     </div>
@@ -320,250 +536,91 @@
 
     {{--  Footer  --}}
     <footer>
-        <p>&copy; 2025 EliteRides. All rights reserved.</p>
+        <p>&copy; 2025 ABC Cars . All rights reserved.</p>
     </footer>
-    {{-- View Detail Modal --}}
-    <div class="modal fade" id="viewDetailsModal" tabindex="-1" aria-labelledby="viewDetailsLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="viewDetailsLabel">Car Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center">
-                        <img id="carImage" src="" alt="Car Image" class="img-fluid rounded mb-3" style="max-height: 300px; object-fit: cover;">
-                    </div>
-                    <!-- First Row -->
-                    <div class="row">
-                        <div class="col">
-                            <p><strong style="color:#f36d33;">Condition:</strong> <span id="carCondition" class="detail-texts"></span></p>
-                        </div>
-                        <div class="col">
-                            <p><strong style="color:#f36d33;">Registration:</strong> <span id="carYear" class="detail-texts"></span></p>
-                        </div>
-                    </div>
 
-                    <!-- Second Row -->
-                    <div class="row">
-                        <div class="col">
-                            <p><strong style="color:#f36d33;">Make:</strong> <span id="carMake" class="detail-texts"></span></p>
-                        </div>
-                        <div class="col">
-                            <p><strong style="color:#f36d33;">Model:</strong> <span id="carModel" class="detail-texts"></span></p>
-                        </div>
-                    </div>
-
-                    <!-- Third Row -->
-                    <div class="row">
-                        <div class="col">
-                            <p><strong style="color:#f36d33;">Price:</strong> $<span id="carPrice" class="detail-texts"></span></p>
-                        </div>
-                        <div class="col">
-                            <p><strong style="color:#f36d33;">Engine Power:</strong> <span id="carEngine" class="detail-texts"></span></p>
-                        </div>
-                    </div>
-
-                    <!-- Fourth Row -->
-                    <div class="row">
-                        <div class="col">
-                            <p><strong style="color:#f36d33;">Steering Position:</strong> <span id="carSteering" class="detail-texts"></span></p>
-                        </div>
-                        <div class="col">
-                            <p><strong style="color:#f36d33;">Transmission:</strong> <span id="carTransmission" class="detail-texts"></span></p>
-                        </div>
-                    </div>
-
-                    <!-- Fifth Row -->
-                    <div class="row">
-                        <div class="col">
-                            <p><strong style="color:#f36d33;">Fuel Type:</strong> <span id="carFuel" class="detail-texts"></span></p>
-                        </div>
-                        <div class="col">
-                            <p><strong style="color:#f36d33;">Color:</strong> <span id="carColor" class="detail-texts"></span></p>
-                        </div>
-                    </div>
-
-                    <!-- Sixth Row -->
-                    <div class="row">
-                        <div class="col">
-                            <p><strong style="color:#f36d33;">Description:</strong> <span id="carDescription"  class="detail-texts"></span></p>
-                        </div>
-                    </div>
-                    <!-- Seventh Row -->
-                    <div class="row">
-                        <div class="col">
-                            <p><strong style="color:#f36d33;">Status:</strong> <span id="carStatus" class="detail-texts"></span></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Close</button>
-                    <button type="button" 
-                        id="editCarBtn"
-                        class="btn btn-outline-primary mb-3" 
-                        data-bs-toggle="modal" 
-                        data-bs-target="#updateCarModal" 
-                        onclick="openEditModal(
-                            {{ $post->id }},
-                            '{{ $post->condition }}',
-                            '{{ $post->make }}',
-                            '{{ $post->model }}',
-                            '{{ $post->registration_year }}',
-                            '{{ $post->price }}',
-                            '{{ $post->engine_power }}',
-                            '{{ $post->steering_position }}',
-                            '{{ $post->transmission }}',
-                            '{{ $post->fuel_type }}',
-                            '{{ $post->color }}',
-                            '{{ $post->description }}',
-                            '{{ $post->status }}',
-                            '{{ $post->img_path }}',
-                        )">
-                        Edit
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
     
-    
-    {{-- Modal for Updating Car Posts --}}
-    <div class="modal fade" id="updateCarModal" tabindex="-1" aria-labelledby="updateCarModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="updateCarModalLabel">Update Car Post</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="updateCarForm" method="POST" action="{{ route('user.updateCarPost', ['id' => $post->id]) }}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    
-                    <div class="modal-body">
-                        <input type="hidden" name="id" id="carPostId">
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <img id="previewImage" src="#" alt="Image Preview" class="img-fluid mt-2 mb-4" style="max-width: 200px; max-height: 150px;"><br>
-                                <br>
-                                <label for="img_path" class="form-label">Image</label>
-                                <input type="file" name="img_path" id="img_path" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="condition" class="form-label">Condition</label>
-                                <select id="condition" name="condition" class="form-select">
-                                    <option value="New">New</option>
-                                    <option value="Used">Used</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="make" class="form-label">Make (Brand)</label>
-                                <input type="text" name="make" id="make" class="form-control" placeholder="e.g., Toyota">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="model" class="form-label">Model</label>
-                                <input type="text" name="model" id="model" class="form-control" placeholder="e.g., Corolla">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="registration_year" class="form-label">Registration Year</label>
-                                <input type="number" name="registration_year" id="registration_year" class="form-control" min="1900" max="{{ date('Y') }}">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="price" class="form-label">Price</label>
-                                <input type="text" name="price" id="price" class="form-control" step="0.01">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="engine_power" class="form-label">Engine Power</label>
-                                <input type="text" name="engine_power" id="engine_power" class="form-control" placeholder="e.g., 150 HP">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="steering_position" class="form-label">Steering Position</label>
-                                <select id="steering_position" name="steering_position" class="form-select" required>
-                                    <option value="Left">Left</option>
-                                    <option value="Right">Right</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="transmission" class="form-label">Transmission</label>
-                                <select id="transmission" name="transmission" class="form-select" required>
-                                    <option value="Automatic">Automatic</option>
-                                    <option value="Manual">Manual</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="fuel_type" class="form-label">Fuel Type</label>
-                                <select id="fuel_type" name="fuel_type" class="form-select" required>
-                                    <option value="Petrol">Petrol</option>
-                                    <option value="Diesel">Diesel</option>
-                                    <option value="Electric">Electric</option>
-                                    <option value="Hybrid">Hybrid</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="color" class="form-label">Color</label>
-                                <input type="text" name="color" id="color" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="description" class="form-label">Description</label>
-                                <textarea name="description" id="description" class="form-control" rows="3"></textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="status" class="form-label">Status</label>
-                                <select class="form-select" id="status" name="status">
-                                    <option value="available">Available</option>
-                                    <option value="unavailable">Unavailable</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn save-btn">Save Changes</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Handle view details button clicks
         document.querySelectorAll('.view-details-btn').forEach(button => {
             button.addEventListener('click', function () {
                 const carId = this.getAttribute('data-id');
-                document.getElementById('carImage').src = this.getAttribute('data-image');
-                document.getElementById('carCondition').textContent = this.getAttribute('data-condition');
-                document.getElementById('carMake').textContent = this.getAttribute('data-make');
-                document.getElementById('carModel').textContent = this.getAttribute('data-model');
-                document.getElementById('carYear').textContent = this.getAttribute('data-year');
-                document.getElementById('carPrice').textContent = this.getAttribute('data-price');
-                document.getElementById('carEngine').textContent = this.getAttribute('data-engine');
-                document.getElementById('carSteering').textContent = this.getAttribute('data-steering');
-                document.getElementById('carTransmission').textContent = this.getAttribute('data-transmission');
-                document.getElementById('carFuel').textContent = this.getAttribute('data-fuel');
-                document.getElementById('carColor').textContent = this.getAttribute('data-color');
-                document.getElementById('carDescription').textContent = this.getAttribute('data-description');
-                document.getElementById('carStatus').textContent = this.getAttribute('data-status');
+                const modal = document.getElementById('viewDetailsModal');
+                const loadingSpinner = document.getElementById('loadingSpinner');
+                const carDetailsContent = document.getElementById('carDetailsContent');
 
-                // Show modal
-                const viewDetailsModal = new bootstrap.Modal(document.getElementById('viewDetailsModal'));
-                viewDetailsModal.show();
+                loadingSpinner.style.display = 'block';
+                carDetailsContent.style.display = 'none';
+
+                fetch(`/user/car-posts/${carId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById('carImage').src = data.car.img_path;
+                            document.getElementById('carCondition').textContent = data.car.condition;
+                            document.getElementById('carMake').textContent = data.car.make;
+                            document.getElementById('carModel').textContent = data.car.model;
+                            document.getElementById('carYear').textContent = data.car.registration_year;
+                            document.getElementById('carPrice').textContent = data.car.price;
+                            document.getElementById('carEngine').textContent = data.car.engine_power;
+                            document.getElementById('carSteering').textContent = data.car.steering_position;
+                            document.getElementById('carTransmission').textContent = data.car.transmission;
+                            document.getElementById('carFuel').textContent = data.car.fuel_type;
+                            document.getElementById('carColor').textContent = data.car.color;
+                            document.getElementById('carDescription').textContent = data.car.description;
+                            document.getElementById('carStatus').textContent = data.car.status;
+
+                            loadingSpinner.style.display = 'none';
+                            carDetailsContent.style.display = 'block';
+
+                            const viewDetailsModal = new bootstrap.Modal(modal);
+                            viewDetailsModal.show();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        loadingSpinner.style.display = 'none';
+                    });
             });
+        });
+        // Handle status update forms
+        document.querySelectorAll('form').forEach(form => {
+            if (form.action.includes('activateCarPost') || form.action.includes('deactivateCarPost')) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    if (!confirm('Are you sure you want to change the status of this post?')) {
+                        return;
+                    }
+
+                    fetch(this.action, {
+                        method: 'POST',
+                        body: new FormData(this),
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.success) {
+                            const carId = this.closest('.stat-card').querySelector('.view-details-btn').dataset.id;
+                            const viewDetailsBtn = document.querySelector(`[data-id="${carId}"]`);
+                            viewDetailsBtn.dataset.status = data.status;
+                            
+                            if(document.getElementById('viewDetailsModal').classList.contains('show')) {
+                                document.getElementById('carStatus').textContent = data.status;
+                            }
+                            
+                            location.reload();
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            }
         });
 
         function openEditModal(id, condition, make, model, registration_year, price, engine_power, steering_position, transmission, fuel_type, color, description, status, img_path) {
@@ -591,6 +648,7 @@
             e.preventDefault();
 
             const formData = new FormData(this);
+            formData.append('status', document.getElementById('status').value);
             const carPostId = formData.get('id');
 
             fetch(`/user/car-posts/${carPostId}`, {

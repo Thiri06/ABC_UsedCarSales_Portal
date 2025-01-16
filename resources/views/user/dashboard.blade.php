@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | EliteRides</title>
+    <title>Dashboard | ABC Cars </title>
     <!-- Bootstrap CSS -->
+    <link rel="icon" href="{{ asset('images/car.png') }}" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Spline+Sans+Mono&display=swap" rel="stylesheet">
@@ -25,11 +26,28 @@
         }
 
         .navbar-brand {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: bold;
-            background: linear-gradient(45deg, #f36d33, #f9d423);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-text {
+            background: linear-gradient(45deg, #f36d33 30%, #dbf320 70%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .cars-text {
+            font-weight: 500;
+            font-size: 1.8rem;
+        }
+
+        .fa-car-side {
+            color: #f36d33;
+            margin-right: 5px;
         }
 
         .navbar {
@@ -103,7 +121,7 @@
 
         .dashboard-container {
             color: #010113;
-            background-color: #d9e6f2;
+            background-color: transparent;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -210,7 +228,22 @@
             <div class="col-md-9 mb-5">
                 <h4 class="mb-4 title-bar">User Dashboard</h4>
                 <div class="dashboard-container text-center">
-                    <p>You are logged in!</p>
+                    {{-- Notifications from Bid Status --}}
+                    @if(Auth::user()->unreadNotifications->isNotEmpty())
+                        @foreach(Auth::user()->unreadNotifications as $notification)
+                            <div id="notification-{{ str_replace('-', '_', $notification->id) }}" 
+                                class="alert alert-info alert-dismissible fade show" role="alert">
+                                <strong>{{ $notification->data['message'] }}</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" 
+                                        onclick="dismissNotification('{{ $notification->id }}')"></button>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="alert alert-secondary" role="alert">
+                            No new notifications.
+                        </div>
+                    @endif
+
                 </div>
             </div>
         </div>
@@ -221,10 +254,36 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2025 EliteRides. All rights reserved.</p>
+        <p>&copy; 2025 ABC Cars . All rights reserved.</p>
     </footer>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function dismissNotification(notificationId) {
+            const domId = `notification-${notificationId.replace(/-/g, '_')}`;
+            fetch(`{{ route('user.notifications.dismiss', '') }}/${notificationId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    const element = document.getElementById(domId);
+                    if (element) {
+                        element.remove();
+                    } else {
+                        console.error(`Element with ID ${domId} not found.`);
+                    }
+                } else {
+                    console.error('Failed to dismiss notification');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+
 </body>
 </html>

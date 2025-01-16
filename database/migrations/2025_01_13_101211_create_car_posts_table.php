@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('car_posts', function (Blueprint $table) {
             $table->id(); // Auto-increment ID
-            $table->string('condition'); // New or Used
+            $table->string('condition'); // Second hand or third hand
             $table->string('make'); // Car Brand
             $table->string('model'); // Car Model
             $table->year('registration_year'); // Registration Year
@@ -24,8 +24,12 @@ return new class extends Migration
             $table->string('fuel_type'); // Petrol, Diesel, Electric
             $table->string('color'); // Car Color
             $table->text('description'); // Description
+            $table->unsignedBigInteger('views_count')->default(0); // Add views_count
             $table->string('img_path'); // Image file path
             $table->string('status')->default('available'); // Available or Sold
+            $table->decimal('highest_bid', 10, 2)->default(0); // Current highest bid
+            $table->json('unavailable_dates')->nullable(); // Unavailable dates
+            $table->json('unavailable_times')->nullable(); // Unavailable times
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // FK referencing 'users' table
             $table->timestamps(); // created_at and updated_at
         });

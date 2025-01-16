@@ -28,6 +28,15 @@ class CarPost extends Model
         'img_path',
         'status',
         'user_id',
+        'views_count',
+        'highest_bid',
+        'unavailable_dates',
+        'unavailable_times',
+    ];
+    // Casts for JSON fields
+    protected $casts = [
+        'unavailable_dates' => 'array',
+        'unavailable_times' => 'array',
     ];
 
     // Define relationships
@@ -38,11 +47,11 @@ class CarPost extends Model
 
     public function bids()
     {
-        return $this->hasMany(Bid::class);
+        return $this->hasMany(Bid::class, 'car_id');
     }
 
     public function appointments()
     {
-        return $this->hasMany(Appointment::class);
+        return $this->hasMany(Appointment::class, 'car_id');
     }
 }

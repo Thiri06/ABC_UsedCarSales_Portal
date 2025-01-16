@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EliteRides - Homepage</title>
+    <title>ABC Cars  - Homepage</title>
+    <link rel="icon" href="{{ asset('images/car.png') }}" type="image/x-icon">
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Spline+Sans+Mono&display=swap" rel="stylesheet">
@@ -25,11 +27,28 @@
         }
 
         .navbar-brand {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: bold;
-            background: linear-gradient(45deg, #f36d33, #f9d423);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-text {
+            background: linear-gradient(45deg, #f36d33 30%, #dbf320 70%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .cars-text {
+            font-weight: 500;
+            font-size: 1.8rem;
+        }
+
+        .fa-car-side {
+            color: #f36d33;
+            margin-right: 5px;
         }
 
         .navbar {
@@ -215,7 +234,8 @@
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
                 <i class="fas fa-car-side"></i>
-                EliteRides</a>
+                <span class="brand-text">ABC</span><span class="cars-text">cars</span>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -245,9 +265,9 @@
     <div class="container section-spacing">
         <div class="row align-items-center hero-section">
             <div class="col-md-6 hero-text mt-5">
-                <h1>Find Your Perfect Ride, New or Used!</h1>
+                <h1>Find Your Perfect Ride, Second Hand or Third Hand!</h1>
                 <p>Sell, Buy, or Discover the car of your dreams—all in one place.</p>
-                <a href="{{ route('sell.my.car') }}">
+                <a href="{{ route('register') }}">
                     <button class="btn btn-dark me-2">Sell My Car</button>
                 </a>
                 <a href="{{ route('car.listing') }}">
@@ -263,7 +283,7 @@
 
     <!-- Top Deals Section Start -->
     <div class="container top-deals section-spacing">
-        <h2 class="text-center mb-5" style="color: #dddefd">Top Deals on EliteRides:</h2>
+        <h2 class="text-center mb-5" style="color: #dddefd">Top Deals on ABC Cars :</h2>
         <div class="row g-4">
             @foreach ($topCars as $car)
             <div class="col-md-3 mt-5 mb-5">
@@ -290,17 +310,17 @@
                 <div class="col-md-4 mb-4">
                     <img src="{{ asset('images/one.png') }}" alt="Step 1" class="img-fluid step-number">
                     <h5 class="mt-4">Register and Login</h5>
-                    <p class="small-text mt-3">Sign up on EliteRides by providing your details. After registering, log in to access a wide range of features for buying, selling, and managing your car listings.</p>
+                    <p class="small-text mt-3">Sign up on ABC Cars  by providing your details. After registering, log in to access a wide range of features for buying, selling, and managing your car listings.</p>
                 </div>
                 <div class="col-md-4 mb-4">
                     <img src="{{ asset('images/two.png') }}" alt="Step 2" class="img-fluid step-number">
                     <h5 class="mt-4">Sell or Buy A Car</h5>
-                    <p class="small-text mt-3">Browse through our extensive listings of new and used cars. Sellers can list their vehicles, and buyers can place bids, book test drives, or directly purchase cars.</p>
+                    <p class="small-text mt-3">Browse through our extensive listings of used cars. Sellers can list their vehicles, and buyers can place bids, book test drives, or directly purchase cars.</p>
                 </div>
                 <div class="col-md-4 mb-4">
                     <img src="{{ asset('images/three.png') }}" alt="Step 3" class="img-fluid step-number">
                     <h5 class="mt-4">Drive Away Happy!</h5>
-                    <p class="small-text mt-3">Once the deal is done, schedule a test drive or pick up your new car. We ensure a smooth and safe transaction, so you can enjoy your ride with confidence!</p>
+                    <p class="small-text mt-3">Once the deal is done, schedule a test drive or pick up your interested car. We ensure a smooth and safe transaction, so you can enjoy your ride with confidence!</p>
                 </div>
             </div>
         </div>
@@ -312,26 +332,26 @@
         <div class="row faq-section">
             <div class="col-md-5 mt-5">
                 <h2 style="color: #dbf320;">FAQs</h2>
-                <p>Get answers to all your questions about buying, selling, and using EliteRides</p>
+                <p>Get answers to all your questions about buying, selling, and using ABC Cars </p>
             </div>
             <div class="col-md-7 mt-5">
                 <div class="accordion" id="faqAccordion">
                     <div class="accordion-item mb-3">
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                What is EliteRides?
+                                What is ABC Cars ?
                             </button>
                         </h2>
                         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
                             <div class="accordion-body" style="background-color: #220a01;">
-                                EliteRides is an online platform that connects car buyers and sellers. Whether you're looking to sell your car, buy a new or used one, or bid on a vehicle, we provide an easy and secure experience.
+                                ABC Cars  is an online platform that connects car buyers and sellers. Whether you're looking to sell your car, buy a used one, or bid on a vehicle, we provide an easy and secure experience.
                             </div>
                         </div>
                     </div>
                     <div class="accordion-item mb-3">
                         <h2 class="accordion-header" id="headingTwo">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                How does EliteRides work?
+                                How does ABC Cars  work?
                             </button>
                         </h2>
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
@@ -343,7 +363,7 @@
                     <div class="accordion-item mb-3">
                         <h2 class="accordion-header" id="headingThree">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                Is EliteRides free to use?
+                                Is ABC Cars  free to use?
                             </button>
                         </h2>
                         <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
@@ -361,7 +381,7 @@
                         <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
                             <div class="accordion-body" style="background-color: #220a01;">
                                 <ol>
-                                    <li>Register in EliteRides</li>
+                                    <li>Register in ABC Cars </li>
                                     <li>Log in to your account</li>
                                     <li>Click on "Sell My Car"</li>
                                     <li>Fill in details about your car, upload pictures, and set a price</li>
@@ -447,14 +467,14 @@
                         </h2>
                         <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen" data-bs-parent="#faqAccordion">
                             <div class="accordion-body" style="background-color: #220a01;">
-                                You can reach out to our support team through the "Contact Us" page or email us at support@eliterides.com.
+                                You can reach out to our support team through the "Contact Us" page or email us at support@ABC Cars .com.
                             </div>
                         </div>
                     </div>
                     <div class="accordion-item mb-3">
                         <h2 class="accordion-header" id="headingEleven">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
-                                Is my data secure on EliteRides?
+                                Is my data secure on ABC Cars ?
                             </button>
                         </h2>
                         <div id="collapseEleven" class="accordion-collapse collapse" aria-labelledby="headingEleven" data-bs-parent="#faqAccordion">
@@ -471,7 +491,7 @@
 
     <!-- Footer Start -->
     <footer class="text-center mt-5">
-        <p class="mb-0">&copy; 2025 EliteRides. All rights reserved.</p>
+        <p class="mb-0">&copy; 2025 ABC Cars . All rights reserved.</p>
     </footer>
     {{-- Footer End --}}
 

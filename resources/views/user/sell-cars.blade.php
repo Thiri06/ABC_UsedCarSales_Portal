@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | EliteRides</title>
+    <title>Dashboard | ABC Cars </title>
+    <link rel="icon" href="{{ asset('images/car.png') }}" type="image/x-icon">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -25,11 +26,28 @@
         }
 
         .navbar-brand {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: bold;
-            background: linear-gradient(45deg, #f36d33, #f9d423);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-text {
+            background: linear-gradient(45deg, #f36d33 30%, #dbf320 70%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .cars-text {
+            font-weight: 500;
+            font-size: 1.8rem;
+        }
+
+        .fa-car-side {
+            color: #f36d33;
+            margin-right: 5px;
         }
 
         .navbar {
@@ -165,10 +183,29 @@
         }
 
         .form-control:focus {
-            color: #dfe0fd;
             background-color: #2d2f65;
+            color: #dfe0fd;
             border-color: #f36d33;
             box-shadow: 0 0 5px rgba(243, 109, 51, 0.5);
+        }
+        .form-control::placeholder {
+            color: #dfe0fd;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        select.form-control {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23dfe0fd' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 12px;
+            padding-right: 2rem;
+            appearance: none;
+            background-color: #23244d;
+        }
+
+        select.form-control:focus {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23f36d33' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
         }
 
         .form-card {
@@ -215,8 +252,8 @@
                                     <div class="col-md-6 mb-3">
                                         <label for="condition" class="form-label">Condition</label>
                                         <select id="condition" name="condition" class="form-select" required>
-                                            <option value="New">New</option>
-                                            <option value="Used">Used</option>
+                                            <option value="Second Hand">Second Hand</option>
+                                            <option value="Third Hand">Third Hand</option>
                                         </select>
                                     </div>
                                     <!-- Make -->
@@ -232,12 +269,12 @@
                                     <!-- Registration Year -->
                                     <div class="col-md-6 mb-3">
                                         <label for="registration_year" class="form-label">Registration Year</label>
-                                        <input type="number" id="registration_year" name="registration_year" class="form-control" min="1900" max="{{ date('Y') }}" required>
+                                        <input type="number" id="registration_year" name="registration_year" class="form-control" min="1900" max="{{ date('Y') }}" placeholder="e.g., 2016" required>
                                     </div>
                                     <!-- Price -->
                                     <div class="col-md-6 mb-3">
                                         <label for="price" class="form-label">Price ($)</label>
-                                        <input type="number" id="price" name="price" class="form-control" step="0.01" required>
+                                        <input type="number" id="price" name="price" class="form-control" step="0.01" placeholder="e.g., 30000" required>
                                     </div>
                                     <!-- Engine Power -->
                                     <div class="col-md-6 mb-3">
@@ -302,7 +339,7 @@
 
     {{--  Footer  --}}
     <footer>
-        <p>&copy; 2025 EliteRides. All rights reserved.</p>
+        <p>&copy; 2025 ABC Cars . All rights reserved.</p>
     </footer>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>

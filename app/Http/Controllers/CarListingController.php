@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\CarPost;
+use App\Models\Bid;
+use App\Models\Appointment;
+use Illuminate\Support\Facades\Auth;
+
 
 class CarListingController extends Controller
 {
@@ -19,6 +23,10 @@ class CarListingController extends Controller
 
         // Filter posts to only include those with "available" status
         $query->where('status', 'available');
+
+        $query->whereHas('user', function ($q) {
+            $q->where('banned_at', null);  // assuming 'is_banned' is a boolean column in the users table
+        });
 
         // Apply filters only when they are provided and valid
         if ($request->filled('search')) {
@@ -79,16 +87,6 @@ class CarListingController extends Controller
         // Return view with car posts
         return view('carlisting', compact('carPosts', 'makes', 'models', 'colors'));
     }
-
-    public function show($id)
-    {
-        // Fetch the car post by ID
-        $car = CarPost::findOrFail($id); // Throws 404 if the car is not found
-
-        // Pass the car details to the view
-        return view('cardetail', compact('car'));
-    }
-
     // CarListingController.php
     public function showHomepage()
     {
@@ -97,5 +95,70 @@ class CarListingController extends Controller
 
         // Passing the data to the welcome view
         return view('welcome', compact('topCars')); // Ensure you're passing topCars here
+    }
+
+
+
+    // Car Detail
+    public function show($id)
+    {
+        // Fetch the car post by ID
+        $car = CarPost::with('bids.user')->findOrFail($id); // Throws 404 if the car is not found
+
+        $bids = $car->bids;
+
+        // Pass the car details to the view
+        return view('cardetail', compact('car', 'bids'));
+    }
+
+    public function placeBid(Request $request, $carId)
+    {
+        $request->validate([
+            'bid_amount' => 'required|numeric|min:0',
+        ]);
+
+        $car = CarPost::findOrFail($carId);
+
+        if ($request->bid_amount <= $car->highest_bid) {
+            return back()->withErrors(['bid_amount' => 'Your bid must be higher than the current highest bid.']);
+        }
+
+        Bid::create([
+            'car_id' => $carId,
+            'user_id' => Auth::id(),
+            'bid_amount' => $request->bid_amount,
+            'status' => 'pending',
+        ]);
+
+        $car->update(['highest_bid' => $request->bid_amount]);
+
+        return back()->with('success', 'Bid placed successfully!');
+    }
+
+    public function requestAppointment(Request $request, $carId)
+    {
+        $request->validate([
+            'appointment_date' => 'required|date|after_or_equal:today',
+            'appointment_time' => 'required',
+        ]);
+
+        $car = CarPost::findOrFail($carId);
+
+        if (
+            in_array($request->appointment_date, $car->unavailable_dates ?? []) ||
+            in_array($request->appointment_time, $car->unavailable_times ?? [])
+        ) {
+            return back()->withErrors(['appointment_date' => 'The selected date and time are unavailable.']);
+        }
+
+        Appointment::create([
+            'car_id' => $carId,
+            'user_id' => Auth::id(),
+            'appointment_date' => $request->appointment_date,
+            'appointment_time' => $request->appointment_time,
+            'status' => 'pending',
+        ]);
+
+        return back()->with('success', 'Appointment requested successfully!');
     }
 }

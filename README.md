@@ -1,3 +1,3 @@
-# used_cars_project
-A website for selling and buying used cars or brand new cars.
->>>>>>> 4ab30a8ea3e577a0d8af53697707c76e7330f5d9
+# ABC_UsedCarSales_Portal
+This ABC Cars Sales Portal serves as a bridge between sellers and buyers for used cars such as second hand, third hand. The portal includes user dashboard and admin dashboard.
+

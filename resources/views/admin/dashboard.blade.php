@@ -174,8 +174,9 @@
             background-color: #161632;
             color: #dfe0fd;
             border-radius: 10px;
-            padding: 10px;
+            padding: 8px;
             transition: transform 0.3s ease-in-out;
+            height: 170px;
         }
 
         .stat-card:hover {

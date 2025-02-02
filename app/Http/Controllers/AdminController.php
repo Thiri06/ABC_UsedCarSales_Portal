@@ -19,9 +19,9 @@ class AdminController extends Controller implements HasMiddleware
     }
     public function manageUsers()
     {
-        $users = \App\Models\User::where('is_admin', false)
-            ->select('id', 'name', 'email', 'phone', 'address', 'banned_at')
+        $users = \App\Models\User::select('id', 'name', 'email', 'phone', 'address', 'is_admin', 'banned_at')
             ->get();
+
         return view('admin.manage-users', compact('users'));
     }
     public function getUserData($id)

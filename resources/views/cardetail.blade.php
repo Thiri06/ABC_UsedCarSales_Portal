@@ -144,10 +144,14 @@
         }
 
         .form-control:focus {
-            background-color: #2d2f65;
             color: #dfe0fd;
+            background-color: #2d2f65;
             border-color: #f36d33;
             box-shadow: 0 0 5px rgba(243, 109, 51, 0.5);
+        }
+        .form-control::placeholder {
+            color: #dfe0fd;
+            opacity: 0.7;
         }
 
         .form-card {

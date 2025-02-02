@@ -123,6 +123,12 @@
             padding: 45px;
             border-radius: 10px;
         }
+        .password-suggestion {
+            position: relative;
+            z-index: 1000;
+            color: #dfe0fd;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -167,7 +173,7 @@
 
                         <div class="mb-3">
                             <label for="name" class="form-label">{{ __('Name') }}</label>
-                            <input id="name" name="name" type="text" class="form-control" value="{{ old('name', $user->name) }}" required autofocus autocomplete="name">
+                            <input id="name" name="name" type="text" class="form-control" value="{{ htmlspecialchars(old('name', $user->name)) }}" required autofocus autocomplete="name">
                             @error('name') <div class="text-danger mt-1">{{ $message }}</div> @enderror
                         </div>
 
@@ -289,5 +295,98 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function generateStrongPassword() {
+            const length = 12;
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+            let password = "";
+            
+            // Ensure at least one of each required character type
+            password += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random() * 26)];
+            password += "abcdefghijklmnopqrstuvwxyz"[Math.floor(Math.random() * 26)];
+            password += "0123456789"[Math.floor(Math.random() * 10)];
+            password += "!@#$%^&*"[Math.floor(Math.random() * 8)];
+            
+            // Fill remaining length with random characters
+            for (let i = password.length; i < length; i++) {
+                password += charset[Math.floor(Math.random() * charset.length)];
+            }
+            
+            return password;
+        }
+
+        document.getElementById('update_password_password').addEventListener('focus', function() {
+            if (!document.getElementById('passwordSuggestion')) {
+                const suggestionBox = document.createElement('div');
+                suggestionBox.id = 'passwordSuggestion';
+                suggestionBox.className = 'password-suggestion p-2 mt-2 rounded';
+                suggestionBox.style.backgroundColor = '#161632';
+                suggestionBox.style.border = '1px solid #787cf8';
+                
+                const suggestedPassword = generateStrongPassword();
+                suggestionBox.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Suggested: ${suggestedPassword}</span>
+                        <div>
+                            <button type="button" class="btn btn-sm btn-outline-primary ms-2" onclick="usePassword('${suggestedPassword}')">Use This</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="closePasswordSuggestion()">✕</button>
+                        </div>
+                    </div>
+                `;
+                
+                this.parentNode.appendChild(suggestionBox);
+            }
+        });
+
+        function usePassword(password) {
+            document.getElementById('update_password_password').value = password;
+            document.getElementById('update_password_password_confirmation').value = password;
+            document.getElementById('passwordSuggestion').remove();
+        }
+        function closePasswordSuggestion() {
+            const suggestionBox = document.getElementById('passwordSuggestion');
+            if (suggestionBox) {
+                suggestionBox.remove();
+            }
+        }
+        document.getElementById('update_password_password').addEventListener('input', function() {
+            const password = this.value;
+            const validations = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /[0-9]/.test(password),
+                special: /[!@#$%^&*]/.test(password)
+            };
+
+            let validationFeedback = document.getElementById('validationFeedback');
+            if (!validationFeedback) {
+                validationFeedback = document.createElement('div');
+                validationFeedback.id = 'validationFeedback';
+                validationFeedback.className = 'mt-2';
+                this.parentNode.appendChild(validationFeedback);
+            }
+
+            validationFeedback.innerHTML = `
+                <ul class="list-unstyled">
+                    <li class="${validations.length ? 'text-success' : 'text-danger'}">
+                        <i class="fas ${validations.length ? 'fa-check' : 'fa-times'}"></i> 8+ characters
+                    </li>
+                    <li class="${validations.uppercase ? 'text-success' : 'text-danger'}">
+                        <i class="fas ${validations.uppercase ? 'fa-check' : 'fa-times'}"></i> Uppercase letter
+                    </li>
+                    <li class="${validations.lowercase ? 'text-success' : 'text-danger'}">
+                        <i class="fas ${validations.lowercase ? 'fa-check' : 'fa-times'}"></i> Lowercase letter
+                    </li>
+                    <li class="${validations.number ? 'text-success' : 'text-danger'}">
+                        <i class="fas ${validations.number ? 'fa-check' : 'fa-times'}"></i> Number
+                    </li>
+                    <li class="${validations.special ? 'text-success' : 'text-danger'}">
+                        <i class="fas ${validations.special ? 'fa-check' : 'fa-times'}"></i> Special character
+                    </li>
+                </ul>
+            `;
+        });
+    </script>
 </body>
 </html>

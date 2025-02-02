@@ -27,7 +27,7 @@
                 {{-- Settings Dropdown --}}
                 <li class="nav-item dropdown mt-1">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ Auth::user()->name }} {{-- Display the authenticated user's name --}}
+                        {{ htmlspecialchars(Auth::user()->name) }} {{-- Display the authenticated user's name --}}
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">

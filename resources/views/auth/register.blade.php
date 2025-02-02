@@ -144,6 +144,15 @@
         .form-card h2 {
             color: #dfe0fd;
         }
+        .text-danger {
+            font-size: 12px;
+        }
+        .password-suggestion {
+            position: relative;
+            z-index: 1000;
+            color: #dfe0fd;
+            font-size: 0.9rem;
+        }
 
     </style>
 </head>
@@ -187,7 +196,7 @@
             <div class="col-sm-10 col-md-6 col-lg-4">
                 <div class="form-card">
                     <h2 class="mb-4 text-center">Register</h2>
-                    <form method="POST" action="{{ route('register') }}">
+                    <form method="POST" action="{{ route('register') }}"  autocomplete="on">
                         @csrf
                         <!-- Name -->
                         <div class="mb-3">
@@ -207,15 +216,22 @@
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <input type="password" id="password" class="form-control" name="password" required>
-                            @error('password') <div class="text-danger mt-1">{{ $message }}</div> @enderror
+                            @error('password') 
+                                <div class="text-danger mt-1">
+                                    <i class="fas fa-exclamation-circle"></i> {{ $message }}
+                                </div> 
+                            @enderror
                         </div>
 
                         <!-- Confirm Password -->
                         <div class="mb-3">
                             <label for="password_confirmation" class="form-label">Confirm Password</label>
                             <input type="password" id="password_confirmation" class="form-control" name="password_confirmation" required>
-                            @error('password_confirmation') <div class="text-danger mt-1">{{ $message }}</div> @enderror
-                        </div>
+                            @error('password') 
+                                <div class="text-danger mt-1">
+                                    <i class="fas fa-exclamation-circle"></i> {{ $message }}
+                                </div> 
+                            @enderror                        </div>
 
                         <!-- Phone -->
                         <div class="mb-3">
@@ -251,5 +267,60 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function generateStrongPassword() {
+            const length = 12;
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+            let password = "";
+            
+            // Ensure at least one of each required character type
+            password += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random() * 26)];
+            password += "abcdefghijklmnopqrstuvwxyz"[Math.floor(Math.random() * 26)];
+            password += "0123456789"[Math.floor(Math.random() * 10)];
+            password += "!@#$%^&*"[Math.floor(Math.random() * 8)];
+            
+            // Fill remaining length with random characters
+            for (let i = password.length; i < length; i++) {
+                password += charset[Math.floor(Math.random() * charset.length)];
+            }
+            
+            return password;
+        }
+
+        document.getElementById('password').addEventListener('focus', function() {
+            if (!document.getElementById('passwordSuggestion')) {
+                const suggestionBox = document.createElement('div');
+                suggestionBox.id = 'passwordSuggestion';
+                suggestionBox.className = 'password-suggestion p-2 mt-2 rounded';
+                suggestionBox.style.backgroundColor = '#161632';
+                suggestionBox.style.border = '1px solid #787cf8';
+                
+                const suggestedPassword = generateStrongPassword();
+                suggestionBox.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Suggested: ${suggestedPassword}</span>
+                        <button class="btn btn-sm btn-outline-primary ms-2" onclick="usePassword('${suggestedPassword}')">Use This</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="closePasswordSuggestion()">✕</button>
+                    </div>
+                `;
+                
+                this.parentNode.appendChild(suggestionBox);
+            }
+        });
+
+        function usePassword(password) {
+            document.getElementById('password').value = password;
+            document.getElementById('password_confirmation').value = password;
+            document.getElementById('passwordSuggestion').remove();
+        }
+        function closePasswordSuggestion() {
+            const suggestionBox = document.getElementById('passwordSuggestion');
+            if (suggestionBox) {
+                suggestionBox.remove();
+            }
+        }
+    </script>
+
 </body>
 </html>

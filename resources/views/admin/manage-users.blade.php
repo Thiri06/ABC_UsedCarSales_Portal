@@ -227,6 +227,7 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Address</th>
+                                    <th>Role</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -239,6 +240,13 @@
                                     <td>{{ $user->email }}</td>
                                     <td>{{ $user->phone }}</td>
                                     <td>{{ $user->address }}</td>
+                                    <td>
+                                        @if($user->is_admin)
+                                            <span class="badge bg-primary">Admin</span>
+                                        @else
+                                            <span class="badge bg-secondary">User</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         @if($user->banned_at)
                                             <span class="text-danger">Banned</span>

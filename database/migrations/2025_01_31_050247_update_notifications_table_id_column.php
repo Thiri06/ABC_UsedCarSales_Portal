@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->timestamp('banned_at')->nullable()->after('is_admin');
+        Schema::table('notifications', function (Blueprint $table) {
+            $table->uuid('id')->change();
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('banned_at');
+        Schema::table('notifications', function (Blueprint $table) {
+            $table->string('id')->change();
         });
     }
 };

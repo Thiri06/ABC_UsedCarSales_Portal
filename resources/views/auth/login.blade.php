@@ -144,6 +144,11 @@
         .form-card h2 {
             color: #dfe0fd;
         }
+        .text-danger ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
@@ -196,21 +201,21 @@
                     @endsession
 
                     <!-- Login Form Starts Here -->
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('login') }}" autocomplete="on">
                         @csrf
 
                         <!-- Email Address -->
                         <div class="mb-3">
-                            <x-input-label for="email" :value="__('Email')" />
-                            <x-text-input id="email" class="form-control" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" class="form-control" name="email" autocomplete="username" required>
+                            <x-input-error :messages="$errors->get('email')" class="mt-2 text-danger" />
                         </div>
 
                         <!-- Password -->
                         <div class="mt-4 mb-3">
-                            <x-input-label for="password" :value="__('Password')" />
-                            <x-text-input id="password" class="form-control" type="password" name="password" required autocomplete="current-password" />
-                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" class="form-control" name="password" autocomplete="current-password" required>
+                            <x-input-error :messages="$errors->get('password')" class="mt-2 text-danger" />
                         </div>
 
                         <!-- Remember Me -->

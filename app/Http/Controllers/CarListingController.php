@@ -151,6 +151,19 @@ class CarListingController extends Controller
             return back()->withErrors(['appointment_date' => 'The selected date and time are unavailable.']);
         }
 
+        // Check for existing appointments
+        $existingAppointment = Appointment::where('car_id', $carId)
+            ->where('appointment_date', $request->appointment_date)
+            ->where('appointment_time', $request->appointment_time)
+            ->where('status', '!=', 'rejected')
+            ->first();
+
+        if ($existingAppointment) {
+            return back()->withErrors([
+                'appointment_conflict' => 'This time slot is already booked. Please select a different time.'
+            ]);
+        }
+
         Appointment::create([
             'car_id' => $carId,
             'user_id' => Auth::id(),

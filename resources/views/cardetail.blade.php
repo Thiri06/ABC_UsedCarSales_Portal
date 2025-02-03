@@ -267,21 +267,22 @@
     <!-- Navigation Bar End -->
 
     @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="container alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
     @if($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-            </ul>
+        <div class="container alert alert-danger alert-dismissible fade show" role="alert">
+            @foreach($errors->all() as $error)
+                {{ $error }}
+                @if(!$loop->last) <br> @endif
+            @endforeach
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+
 
     {{-- Back Button --}}
     <a href="{{ route('car.listing') }}" class="btn btn-dark ms-5 mb-4">

@@ -247,6 +247,23 @@
                         <div class="col-md-8">
                             <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
+
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul class="mb-0 list-unstyled">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                                @if (session('error'))
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        {{ session('error') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                @endif
+
                                 <div class="row">
                                     <!-- Condition -->
                                     <div class="col-md-6 mb-3">

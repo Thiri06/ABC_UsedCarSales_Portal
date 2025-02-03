@@ -128,6 +128,7 @@ class UserController extends Controller
     {
         return view('user.sell-cars');
     }
+
     public function store(Request $request)
     {
         // Validate input
@@ -144,6 +145,13 @@ class UserController extends Controller
             'color' => 'required|string',
             'description' => 'required|string',
             'img_path' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ], [
+            'make.required' => 'The car brand is required',
+            'model.required' => 'The car model is required',
+            'img_path.required' => 'Please upload a car image',
+            'img_path.image' => 'The file must be an image',
+            'img_path.mimes' => 'The image must be a jpeg, png, jpg or gif',
+            'img_path.max' => 'The image size cannot exceed 2MB'
         ]);
 
         // Handle image upload

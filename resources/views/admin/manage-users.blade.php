@@ -256,19 +256,24 @@
                                     </td>
                                     <td>
                                         @if($user->banned_at)
-                                            <!-- Show Unban Button for Banned Users -->
                                             <form action="{{ route('admin.unBanUser', $user->id) }}" method="POST" style="display:inline-block;">
                                                 @csrf
                                                 @method('PUT')
-                                                <button class="btn btn-success btn-sm" onclick="return confirm('Are you sure?')">Activate</button>
+                                                <button class="btn btn-success py-0 px-2" style="font-size: 12px;" onclick="return confirm('Are you sure?')">Activate</button>
                                             </form>
                                         @else
-                                            <!-- Show Edit and Ban Buttons for Active Users -->
-                                            <a href="#" class="btn btn-primary btn-sm btn-edit" data-user-id="{{ $user->id }}">Edit</a>
+                                            <a href="#" class="btn btn-primary py-0 px-2 btn-edit" style="font-size: 12px;" data-user-id="{{ $user->id }}">Edit</a>
+                                            @if(!$user->is_admin)
+                                                <form action="{{ route('admin.promoteUser', $user->id) }}" method="POST" style="display:inline-block;">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <button class="btn btn-warning py-0 px-2" style="font-size: 12px;" onclick="return confirm('Are you sure you want to promote this user to Admin?')">Promote</button>
+                                                </form>
+                                            @endif
                                             <form action="{{ route('admin.banUser', $user->id) }}" method="POST" style="display:inline-block;">
                                                 @csrf
                                                 @method('PUT')
-                                                <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to deactivate this user account?')">Deactivate</button>
+                                                <button class="btn btn-danger py-0 px-2" style="font-size: 12px;" onclick="return confirm('Are you sure you want to deactivate this user account?')">Deactivate</button>
                                             </form>
                                         @endif
                                     </td>

@@ -60,6 +60,13 @@ class AdminController extends Controller implements HasMiddleware
         return redirect()->back()->with('success', 'User account has been activated back successfully.');
     }
 
+    public function promoteUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->update(['is_admin' => true]);
+        return redirect()->back()->with('success', 'User has been promoted to Admin successfully.');
+    }
+
 
     // Manage car posts
     public function manageListings()

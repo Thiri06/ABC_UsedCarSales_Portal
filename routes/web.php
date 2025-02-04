@@ -77,7 +77,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/users/{id}/edit', [AdminController::class, 'updateUser'])->name('updateUser');
     Route::put('/users/{id}/ban', [AdminController::class, 'banUser'])->name('banUser');
     Route::put('/users/{id}/unban', [AdminController::class, 'unBanUser'])->name('unBanUser');
-
+    Route::put('/users/{id}/promote', [AdminController::class, 'promoteUser'])->name('promoteUser');
     // Car Post Management
     Route::put('/car-posts/{id}', [AdminController::class, 'update'])->name('updateCarPost');
     Route::put('/deactivate-car-post/{id}', [AdminController::class, 'deactivateCarPost'])->name('deactivateCarPost');
